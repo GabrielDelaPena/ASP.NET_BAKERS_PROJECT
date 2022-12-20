@@ -50,7 +50,7 @@ namespace Bakers.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Bakers.Models.Product", b =>
@@ -82,14 +82,14 @@ namespace Bakers.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("VarietyId")
+                    b.Property<int?>("VarietyId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("VarietyId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Bakers.Models.Variety", b =>
@@ -109,7 +109,7 @@ namespace Bakers.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Variety", (string)null);
+                    b.ToTable("Variety");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -326,16 +326,14 @@ namespace Bakers.Data.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("OrderProduct", (string)null);
+                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("Bakers.Models.Product", b =>
                 {
                     b.HasOne("Bakers.Models.Variety", "Variety")
                         .WithMany("Products")
-                        .HasForeignKey("VarietyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VarietyId");
 
                     b.Navigation("Variety");
                 });

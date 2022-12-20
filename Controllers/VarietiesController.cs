@@ -57,7 +57,7 @@ namespace Bakers.Controllers
         // GET: Varieties/Create
         public IActionResult Create()
         {
-            ViewData["ProductIds"] = new SelectList(_context.Set<Product>(), "Id", "Name");
+            ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
             return View();
         }
 
@@ -66,19 +66,16 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ProductIds")] Variety variety)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Variety variety)
         {
             if (ModelState.IsValid)
             {
-                List<Product> products = new List<Product>();
-                for (int i = 0; i < variety.ProductIds.Count; i++)
-                {
+                //variety.Products = new List<Product>();
+                //foreach (int id in variety.ProductIds)
+                //{
+                //    variety.Products.Add(_context.Product.FirstOrDefault(p => p.Id == id));
+                //}
 
-                    Product product = await _context.Product.FirstOrDefaultAsync(p => p.Id == variety.ProductIds[i]);
-                    products.Add(product);
-                }
-
-                variety.Products = products;
                 _context.Add(variety);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -109,7 +106,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Variety variety)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProductIds")] Variety variety)
         {
             if (id != variety.Id)
             {
@@ -136,6 +133,7 @@ namespace Bakers.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
             return View(variety);
         }
 

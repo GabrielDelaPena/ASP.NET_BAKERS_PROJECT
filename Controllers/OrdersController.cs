@@ -59,10 +59,16 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderDate,Street,Zip,City")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,OrderDate,Street,Zip,City,ProductIds")] Order order)
         {
             if (ModelState.IsValid)
             {
+                order.Products = new List<Product>();
+                foreach (int id in order.ProductIds)
+                {
+                    order.Products.Add(_context.Product.FirstOrDefault(p => p.Id == id));
+                }
+
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -93,7 +99,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City,ProductIds")] Order order)
         {
             if (id != order.Id)
             {

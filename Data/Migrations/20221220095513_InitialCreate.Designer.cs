@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bakers.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221218142434_InitialCreate")]
+    [Migration("20221220095513_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace Bakers.Data.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -71,6 +74,9 @@ namespace Bakers.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -78,7 +84,7 @@ namespace Bakers.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("VarietyId")
+                    b.Property<int?>("VarietyId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -95,6 +101,9 @@ namespace Bakers.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -326,9 +335,7 @@ namespace Bakers.Data.Migrations
                 {
                     b.HasOne("Bakers.Models.Variety", "Variety")
                         .WithMany("Products")
-                        .HasForeignKey("VarietyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VarietyId");
 
                     b.Navigation("Variety");
                 });

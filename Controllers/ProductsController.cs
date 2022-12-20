@@ -35,7 +35,7 @@ namespace Bakers.Controllers
             return View(products);
         }
 
-        // GET: Products/Details/5
+        // GET: Products/Details/5  
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Product == null)
@@ -59,6 +59,7 @@ namespace Bakers.Controllers
         public IActionResult Create()
         {
             ViewData["Variety"] = new SelectList(_context.Set<Variety>(), "Id", "Name");
+            ViewData["Orders"] = new SelectList(_context.Set<Order>(), "Id", "Id");
             return View();
         }
 
@@ -92,7 +93,8 @@ namespace Bakers.Controllers
                 return NotFound();
             }
 
-            ViewData["Variety"] = new SelectList(_context.Set<Variety>(), "Id", "Name");
+            ViewData["Variety"] = new SelectList(_context.Set<Variety>(), "Id", "Name", product.VarietyId);
+            ViewData["Orders"] = new SelectList(_context.Set<Order>(), "Id", "Id");
             return View(product);
         }
 
@@ -101,7 +103,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Image,Favorite")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Image,Favorite,VarietyId")] Product product)
         {
             if (id != product.Id)
             {
@@ -128,6 +130,7 @@ namespace Bakers.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["VarietyId"] = new SelectList(_context.Set<Variety>(), "Id", "Name", product.VarietyId);
             return View(product);
         }
 

@@ -27,15 +27,14 @@ namespace Bakers.Models
 
         // Relations
         // one to many
-        [ForeignKey("Variety")]
-        public int VarietyId { get; set; }
+        public int? VarietyId { get; set; }
         [Display(Name = "Soort")]
         public Variety? Variety { get; set; }
 
         // many to many
-        [NotMapped]
-        public List<int> OrderIds { get; set; }
         [Display(Name = "BestelNummers")]
-        public List<Order> Orders { get; set; }
+        public List<Order>? Orders { get; set; }
+        [NotMapped]
+        public List<int>? OrderIds { get; set; }
     }
 }

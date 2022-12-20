@@ -18,7 +18,8 @@ namespace Bakers.Data.Migrations
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +32,8 @@ namespace Bakers.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,7 +51,8 @@ namespace Bakers.Data.Migrations
                     Price = table.Column<double>(type: "float", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Favorite = table.Column<bool>(type: "bit", nullable: false),
-                    VarietyId = table.Column<int>(type: "int", nullable: false)
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false),
+                    VarietyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -58,8 +61,7 @@ namespace Bakers.Data.Migrations
                         name: "FK_Product_Variety_VarietyId",
                         column: x => x.VarietyId,
                         principalTable: "Variety",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

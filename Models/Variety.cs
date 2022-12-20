@@ -15,9 +15,9 @@ namespace Bakers.Models
 
         // Relations
         // one to many
-        [NotMapped]
-        public List<int> ProductIds { get; set; }
         [Display(Name = "Producten")]
         public List<Product>? Products { get; set; }
+        [NotMapped]
+        public List<int>? ProductIds { get; set; }
     }
 }
