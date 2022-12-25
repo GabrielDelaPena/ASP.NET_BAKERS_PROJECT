@@ -50,7 +50,8 @@ namespace Bakers.Data
                     context.UserRoles.AddRange
                         (
                             new IdentityUserRole<string> { RoleId = "user", UserId = administrator.Id },
-                            new IdentityUserRole<string> { RoleId = "admin", UserId = administrator.Id }
+                            new IdentityUserRole<string> { RoleId = "admin", UserId = administrator.Id },
+                            new IdentityUserRole<string> { RoleId = "user", UserId = dummy.Id }
                         );
                     context.SaveChanges();
 
