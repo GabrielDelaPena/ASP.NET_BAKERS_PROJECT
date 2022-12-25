@@ -7,14 +7,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bakers.Data;
 using Bakers.Models;
+using Bakers.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Bakers.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BakersDbContext _context;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(BakersDbContext context)
         {
             _context = context;
         }
@@ -55,6 +58,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -63,6 +67,7 @@ namespace Bakers.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -79,6 +84,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -98,6 +104,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -134,6 +141,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -154,6 +162,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -7,14 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bakers.Data;
 using Bakers.Models;
+using Bakers.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Bakers.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class OrdersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BakersDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(BakersDbContext context)
         {
             _context = context;
         }
