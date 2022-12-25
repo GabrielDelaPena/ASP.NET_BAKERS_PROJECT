@@ -29,6 +29,7 @@ namespace Bakers.Controllers
               return View(await _context.Order
                   .Where(o => !o.IsHidden)
                   .Include(o => o.Products)
+                  .Include(o => o.User)
                   .ToListAsync());
         }
 
@@ -42,6 +43,7 @@ namespace Bakers.Controllers
 
             var order = await _context.Order
                 .Include(o => o.Products)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -55,6 +57,7 @@ namespace Bakers.Controllers
         public IActionResult Create()
         {
             ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -63,7 +66,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderDate,Street,Zip,City,ProductIds")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,OrderDate,Street,Zip,City,ProductIds,UserId")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -95,6 +98,7 @@ namespace Bakers.Controllers
             }
 
             ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }
 
@@ -103,7 +107,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City,ProductIds")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City,ProductIds,UserId")] Order order)
         {
             if (id != order.Id)
             {
@@ -130,6 +134,7 @@ namespace Bakers.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }
 
@@ -143,6 +148,7 @@ namespace Bakers.Controllers
 
             var order = await _context.Order
                 .Include(o => o.Products)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {

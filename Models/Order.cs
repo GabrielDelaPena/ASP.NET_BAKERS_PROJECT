@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using Bakers.Areas.Identity.Data;
 
 namespace Bakers.Models
 {
@@ -30,5 +31,10 @@ namespace Bakers.Models
         public List<Product>? Products { get; set; }
         [NotMapped]
         public List<int>? ProductIds { get; set; }
+
+        [Display(Name = "User")]
+        public ApplicationUser? User { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string? UserId { get; set; }
     }
 }
