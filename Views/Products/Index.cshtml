@@ -6,9 +6,12 @@
 
 <h1>Index</h1>
 
-<p>
+@if (User.IsInRole("admin"))
+{  
+    <p>
     <a asp-action="Create">Create New</a>
-</p>
+    </p>
+}
 
 <form asp-action="Index" asp-controller="Products">
     Search:
@@ -37,9 +40,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Variety)
             </th>
-            <th>
+@*            <th>
                 @Html.DisplayNameFor(model => model.Orders)
-            </th>
+            </th>*@
         </tr>
     </thead>
     <tbody>
@@ -63,17 +66,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Variety.Name)
             </td>
-            <td>
+@*            <td>
                 @foreach (var order in item.Orders)
                 {
                     @Html.DisplayFor(modelItem => order.Id)<span>,</span>     
                 }
-            </td>
+            </td>*@
             <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
             @if (User.IsInRole("admin"))
             {                    
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                 
             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             }
             </td>

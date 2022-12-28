@@ -118,7 +118,21 @@ namespace Bakers.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    Order existingOrder = _context.Order.Include(o => o.Products).First(o => o.Id == id);
+                    existingOrder.OrderDate = order.OrderDate;
+                    existingOrder.Street = order.Street;
+                    existingOrder.Zip = order.Zip;
+                    existingOrder.City = order.City;
+                    existingOrder.IsHidden = order.IsHidden;
+                    existingOrder.UserId = order.UserId;
+                    existingOrder.Products.Clear();
+
+                    
+                    foreach (int productIds in order.ProductIds)
+                    {
+                        existingOrder.Products.Add(_context.Product.FirstOrDefault(p => p.Id == productIds));
+                    }
+                    _context.Update(existingOrder);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

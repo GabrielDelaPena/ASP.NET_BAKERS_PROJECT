@@ -70,15 +70,15 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Variety variety)
+        public async Task<IActionResult> Create([Bind("Id,Name,ProductIds")] Variety variety)
         {
             if (ModelState.IsValid)
             {
-                //variety.Products = new List<Product>();
-                //foreach (int id in variety.ProductIds)
-                //{
-                //    variety.Products.Add(_context.Product.FirstOrDefault(p => p.Id == id));
-                //}
+                variety.Products = new List<Product>();
+                foreach (int id in variety.ProductIds)
+                {
+                    variety.Products.Add(_context.Product.FirstOrDefault(p => p.Id == id));
+                }
 
                 _context.Add(variety);
                 await _context.SaveChangesAsync();
@@ -121,6 +121,12 @@ namespace Bakers.Controllers
             {
                 try
                 {
+                    variety.Products = new List<Product>();
+                    foreach (int productId in variety.ProductIds)
+                    {
+                        variety.Products.Add(_context.Product.FirstOrDefault(p => p.Id == productId));
+                    }
+
                     _context.Update(variety);
                     await _context.SaveChangesAsync();
                 }

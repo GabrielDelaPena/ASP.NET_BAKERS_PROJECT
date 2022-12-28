@@ -60,5 +60,23 @@ namespace Bakers.Controllers
             }
             return View(applicationUser);
         }
+
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .Include(p => p.Orders)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
     }
 }
