@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Bakers.Models.ViewModels;
 
 namespace Bakers.Controllers
 {
@@ -20,57 +21,100 @@ namespace Bakers.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationContext = _context.Users
-                .Include(u => u.Orders);
-            return View(await applicationContext.ToListAsync());
+            //var applicationContext = _context.Users
+            //    .Include(u => u.Orders);
+            //return View(await applicationContext.ToListAsync());
+            List<UserViewModel> vmUsers = new List<UserViewModel>();
+            List<ApplicationUser> users = _context.Users.ToList();
+            foreach (ApplicationUser user in users)
+            {
+                vmUsers.Add(new UserViewModel 
+                { 
+                    UserName = user.UserName, 
+                    Email = user.Email, 
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,   
+                    Roles = (from userRole in _context.UserRoles
+                             where userRole.UserId == user.Id
+                             orderby userRole.RoleId
+                             select userRole.RoleId).ToList()
+                });
+            }
+            return View(vmUsers);
         }
 
-        public async Task<IActionResult> Edit(string? id)
+        public IActionResult Edit(string userName)
         {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
+            //if (id == null || _context.Users == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound();
-            }
+            //var users = await _context.Users.FindAsync(id);
+            //if (users == null)
+            //{
+            //    return NotFound();
+            //}
 
-            return View(users);
+            //return View(users);
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            RoleViewModel rvm = new RoleViewModel()
+            {
+                UserName = user.UserName,
+                Roles = (from userRole in _context.UserRoles
+                         where userRole.UserId == user.Id
+                         orderby userRole.RoleId
+                         select userRole.RoleId).ToList()
+            };
+            ViewData["RoleIds"] = new MultiSelectList(_context.Roles.OrderBy(c => c.Name), "Id", "Name", rvm.Roles);
+            return View(rvm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,FirstName,LastName")] ApplicationUser applicationUser)
+        public IActionResult Edit([Bind("UserName,Roles")] RoleViewModel _model)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == applicationUser.Id);
-            var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == applicationUser.Id);
+            //var user = _context.Users.FirstOrDefault(u => u.Id == applicationUser.Id);
+            //var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == applicationUser.Id);
 
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
+            //{
+            //    user.FirstName = applicationUser.FirstName;
+            //    user.LastName = applicationUser.LastName;
+            //    _context.Users.Update(user);
+            //    _context.SaveChanges();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(applicationUser);
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == _model.UserName); // User
+            List<IdentityUserRole<string>> roles = _context.UserRoles.Where(ur => ur.UserId == user.Id).ToList(); // Roles
+            foreach (IdentityUserRole<string> role in roles) // Clear user roles
             {
-                user.FirstName = applicationUser.FirstName;
-                user.LastName = applicationUser.LastName;
-                _context.Users.Update(user);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                _context.Remove(role);
             }
-            return View(applicationUser);
+            if (_model.Roles != null)
+            {
+                foreach (string roleId in _model.Roles)
+                {
+                    _context.UserRoles.Add(new IdentityUserRole<string>() { RoleId = roleId, UserId = user.Id });
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Details(string? id)
+        public async Task<IActionResult> Details(string? userName)
         {
-            if (id == null || _context.Users == null)
+            if (userName == null || _context.Users == null)
             {
                 return NotFound();
             }
 
             var user = await _context.Users
                 .Include(p => p.Orders)
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.UserName == userName);
             if (user == null)
             {
                 return NotFound();
