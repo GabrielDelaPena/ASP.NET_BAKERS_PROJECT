@@ -107,7 +107,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City,ProductIds,UserId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,Street,Zip,City,ProductIds,UserId,Delivered")] Order order)
         {
             if (id != order.Id)
             {
@@ -125,6 +125,7 @@ namespace Bakers.Controllers
                     existingOrder.City = order.City;
                     existingOrder.IsHidden = order.IsHidden;
                     existingOrder.UserId = order.UserId;
+                    existingOrder.Delivered = order.Delivered;
                     existingOrder.Products.Clear();
 
                     

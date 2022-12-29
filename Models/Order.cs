@@ -20,8 +20,10 @@ namespace Bakers.Models
         [Display(Name = "Postcode")]
         public string Zip { get; set; }
         [Required]
-        [Display(Name = "Stad/Gemeente")]
+        [Display(Name = "Woonplaats")]
         public string City { get; set; }
+        [Display(Name = "Geleverd")]
+        public Boolean Delivered { get; set; } = false;
         //Verbergen
         public Boolean IsHidden { get; set; }
 
