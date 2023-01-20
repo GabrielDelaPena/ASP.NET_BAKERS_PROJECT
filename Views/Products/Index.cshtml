@@ -4,7 +4,24 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div id="carouselImages" class="carousel slide" data-bs-ride="true">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/Images/carousel2.jpg" class="d-block w-100" alt="Carousel image 1">
+        </div>
+        <div class="carousel-item">
+            <img src="~/Images/carousel1.jpg" class="d-block w-100" alt="Carousel image 2">
+        </div>
+        <div class="carousel-item">
+            <img src="~/Images/carousel3.jpg" class="d-block w-100" alt="Carousel image 3">
+        </div>
+    </div>
+</div>
 
 @if (User.IsInRole("admin"))
 {  
@@ -13,14 +30,19 @@
     </p>
 }
 
-<form asp-action="Index" asp-controller="Products">
+<div>
+    <h4 class="text-center mt-5">Pies of the week</h4>
+    <h5 class="text-center">Enjoy a weekly selection of our favorites pies</h5>
+</div>
+
+<form asp-action="Index" asp-controller="Products" style="margin: 50px auto 50px auto">
     Search:
     <input type="text" name="searchField" value=@ViewData["searchField"]></>
     <input type="submit" value="Filter" />
 </form>
 
 <table class="table">
-    <thead>
+@*    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -39,15 +61,35 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Variety)
-            </th>
+            </th>*@
 @*            <th>
                 @Html.DisplayNameFor(model => model.Orders)
             </th>*@
-        </tr>
-    </thead>
+@*        </tr>
+    </thead>*@
     <tbody>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
 @foreach (var item in Model) {
-        <tr>
+                <div class="col">
+                    <div class="card pie-card">
+                        <img src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="card-img-top">
+                        <div class="card-body pie-button">
+                            <h4 class="d-grid">
+                                <a class="btn btn-secondary" style="background-color: #DDB7B2; border: none;">Add to cart</a>
+                            </h4>
+
+                            <div class="d-flex justify-content-between mt-2">
+                                <h2 class="text-start">
+                                    <a class="pie-link" style="text-decoration: none; color: #000000; cursor: pointer; font-size: 20px;">@item.Name</a>
+                                </h2>
+                                <h5 class="text-nowrap">
+                                    @item.Price €
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+@*        <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -65,14 +107,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Variety.Name)
-            </td>
+            </td>*@
 @*            <td>
                 @foreach (var order in item.Orders)
                 {
                     @Html.DisplayFor(modelItem => order.Id)<span>,</span>     
                 }
             </td>*@
-            <td>
+@*            <td>
             <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
             @if (User.IsInRole("admin"))
             {
@@ -81,7 +123,8 @@
             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             }
             </td>
-        </tr>
+        </tr>*@
 }
+        </div>
     </tbody>
 </table>
