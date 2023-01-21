@@ -6,10 +6,22 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Variety</h4>
-    <hr />
-    <dl class="row">
+<div style="margin-top: 75px;">
+    <h4>Details for @Html.DisplayFor(model => model.Name)</h4>
+    <div class="row gx-5 mt-3">
+        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
+        <div class="col-7">
+            <h4>@Html.DisplayFor(model => model.Name)</h4>
+            <h5>Products :</h5>
+            @foreach (var product in Model.Products)
+            {
+                @Html.DisplayFor(model => product.Name)
+                <br />
+            }
+        </div>
+    </div>
+ 
+@*    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -26,9 +38,12 @@
                 <br />
             }
         </dd>
-    </dl>
+    </dl>*@
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div style="margin-top: 20px; display: flex; flex-direction: column; width: 150px;">
+    @if (User.IsInRole("admin"))
+    {
+        <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Edit" asp-route-id="@Model?.Id">✏ Edit</a>
+    }
+    <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Index">⬅ Back to List</a>
 </div>

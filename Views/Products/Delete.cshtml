@@ -4,13 +4,26 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+@*<h1>Delete</h1>*@
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 style="margin-top: 120px;">Are you sure you want to delete @Html.DisplayFor(model => model.Name)?</h3>
 <div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
+@*    <h4>Product</h4>*@
+    <div class="row gx-5 mt-5">
+        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
+        <div class="col-7">
+            <h4>@Html.DisplayFor(model => model.Name)</h4>
+            <p>@Html.DisplayFor(model => model.Description)</p>
+            <h3 class="pull-right">@Html.DisplayFor(model => model.Price) €</h3>
+            <h5 class="mt-5">Orders :</h5>
+            @foreach (var order in Model.Orders)
+            {
+                @Html.DisplayFor(model => order.Id)
+                <span>, </span>
+            }
+        </div>
+    </div>
+@*    <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -60,11 +73,11 @@
                 <span>|</span>
             }
         </dd>
-    </dl>
+    </dl>*@
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" class="d-flex flex-column mt-5" style="width: 115px; gap: 10px">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        <a asp-action="Index"style="text-decoration: none; color: black; cursor: pointer;">⬅ Back to List</a>
     </form>
 </div>

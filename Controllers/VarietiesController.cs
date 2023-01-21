@@ -13,7 +13,6 @@ using System.Data;
 
 namespace Bakers.Controllers
 {
-    [Authorize(Roles = "admin")]
     public class VarietiesController : Controller
     {
         private readonly BakersDbContext _context;
@@ -38,7 +37,7 @@ namespace Bakers.Controllers
             return View(varieties);
 
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Varieties/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -58,6 +57,7 @@ namespace Bakers.Controllers
             return View(variety);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Varieties/Create
         public IActionResult Create()
         {
@@ -65,6 +65,7 @@ namespace Bakers.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Varieties/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -86,7 +87,7 @@ namespace Bakers.Controllers
             }
             return View(variety);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Varieties/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -110,6 +111,7 @@ namespace Bakers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProductIds")] Variety variety)
         {
             if (id != variety.Id)
@@ -148,6 +150,7 @@ namespace Bakers.Controllers
         }
 
         // GET: Varieties/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Variety == null)
@@ -169,6 +172,7 @@ namespace Bakers.Controllers
         // POST: Varieties/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Variety == null)
