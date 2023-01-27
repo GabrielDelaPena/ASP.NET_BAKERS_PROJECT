@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Bakers.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
-    <header>
         <nav class="navbar navbar-expand-md py-2 navbar-light fixed-top" style="background-color: #C47C54;">
             <div class="container-fluid">
                 <a class="navbar-brand" style="color: white; font-size: 40px" asp-area="" asp-controller="Home" asp-action="Index">Baker's</a>
@@ -32,6 +32,12 @@
                         </li>
                         <li class="nav-item">
                                 <a class="nav-link" style="color: white;" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                        </li>
+                        }
+                        @if (User.IsInRole("admin") || User.IsInRole("employee"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: white;" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestions</a>
                         </li>
                         }
                         <li class="nav-item">

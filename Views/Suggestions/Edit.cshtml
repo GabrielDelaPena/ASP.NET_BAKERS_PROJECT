@@ -1,17 +1,11 @@
 ﻿@model Bakers.Models.Product
 
-@{
-    ViewData["Title"] = "Create";
-}
 
-@*<h1>Create</h1>
-
-<h4>Product</h4>
-<hr />*@
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-4">
-        <form asp-action="Create" style="display: flex; flex-direction: column; gap: 8px;">
+        <form asp-action="Edit" style="display: flex; flex-direction: column; gap: 8px;">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,23 +26,19 @@
                 <input asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
-@*            <div class="form-group form-check">
+            <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Favorite" /> @Html.DisplayNameFor(model => model.Favorite)
+                    <p class="mt-2">Dear admin/employee, If you wish to sell this product. Please edit this product and check favorite.</p>
                 </label>
-            </div>*@
-            @*Varieties*@
+            </div>
             <div class="form-group">
                 <label asp-for="VarietyId" class="control-label"></label>
                 <select asp-for="VarietyId" class="form-control" asp-items="ViewBag.Variety"></select>
+                <span asp-validation-for="VarietyId" class="text-danger"></span>
             </div>
-            @*Orders*@
-@*            <div class="form-group">
-                <label asp-for="OrderIds" class="control-label"></label>
-                <select asp-for="OrderIds" class="form-control" asp-items="ViewBag.Orders"></select>
-            </div>*@
             <div class="form-group mt-3">
-                <input type="submit" value="Create" class="btn btn-primary" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
+                <input type="submit" value="Save" class="btn btn-primary" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
             </div>
         </form>
     </div>
@@ -59,5 +49,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

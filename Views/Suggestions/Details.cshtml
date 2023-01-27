@@ -1,0 +1,27 @@
+﻿@model Bakers.Models.Product
+
+<h1>Details</h1>
+
+<div style="margin-top: 75px;">
+    <h3 class="my-3">
+        @Model.Name
+    </h3>
+    <p>Dear admin/employee, If you wish to sell this product. Please edit this product and check favorite.</p>
+
+    <div class="row gx-5">
+        <img alt="@Model.Name" src="@Model.Image" class="img-fluid col-5" />
+        <div class="col-7">
+            <h4>@Html.DisplayFor(model => model.Name)</h4>
+            <p>@Html.DisplayFor(model => model.Description)</p>
+            <h3 class="pull-right">@Html.DisplayFor(model => model.Price) €</h3>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 20px; display: flex; flex-direction: column; width: 150px;">
+    @if (User.IsInRole("admin") || User.IsInRole("employee"))
+    {
+        <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Edit" asp-route-id="@Model?.Id">✏ Edit</a>
+    }
+    <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Index">⬅ Back to List</a>
+</div>
+

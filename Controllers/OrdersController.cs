@@ -97,7 +97,7 @@ namespace Bakers.Controllers
                 return NotFound();
             }
 
-            ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
+            ViewData["Products"] = new SelectList(_context.Set<Product>().Where(p => p.Favorite == true), "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }

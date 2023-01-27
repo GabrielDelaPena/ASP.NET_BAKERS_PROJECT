@@ -37,7 +37,7 @@ namespace Bakers.Controllers
             return View(varieties);
 
         }
-        [Authorize(Roles = "admin")]
+
         // GET: Varieties/Details/5
         public async Task<IActionResult> Details(int? id)
         {

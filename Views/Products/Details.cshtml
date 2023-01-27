@@ -12,14 +12,21 @@
     </h3>
 
     <div class="row gx-5">
-        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
+        <img alt="@Model.Name" src="@Model.Image" class="img-fluid col-5" />
         <div class="col-7">
             <h4>@Html.DisplayFor(model => model.Name)</h4>
             <p>@Html.DisplayFor(model => model.Description)</p>
             <h3 class="pull-right">@Html.DisplayFor(model => model.Price) €</h3>
-            <div class="addToCart">
-                <input type="submit" value="Add to cart" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
+
+            @if (User.IsInRole("admin") || User.IsInRole("user")) {
+            <div>
+                <a asp-action="AddToCart" asp-route-name="@Model.Name" class="btn btn-secondary" style="background-color: #DDB7B2; border: none;">Add to cart</a>
             </div>
+            } else {
+            <div class="addToCart">
+                <p>Crave on this delicious dessert? Login now and get it!</p>
+            </div>
+            }
         </div>
     </div>
     @*    <h4>Product</h4>

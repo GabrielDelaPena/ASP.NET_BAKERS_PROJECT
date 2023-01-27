@@ -10,15 +10,25 @@ using Bakers.Models;
 using Bakers.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System.Text;
+using Microsoft.AspNetCore.Session;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Bakers.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly BakersDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISession _session;
 
-        public ProductsController(BakersDbContext context)
+        public ProductsController(BakersDbContext context, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+            _session = _httpContextAccessor.HttpContext.Session;
             _context = context;
         }
 
@@ -26,7 +36,7 @@ namespace Bakers.Controllers
         public async Task<IActionResult> Index(string searchField = "")
         {             
               List<Product> products = await _context.Product
-                .Where(p => !p.IsHidden)
+                .Where(p => !p.IsHidden && p.Favorite)
                 .Include(p => p.Variety)
                 .Include(p => p.Orders)
                 .ToListAsync();
@@ -58,7 +68,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -67,16 +77,17 @@ namespace Bakers.Controllers
             return View();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Image,Favorite,VarietyId,OrderIds")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Image,VarietyId,OrderIds")] Product product)
         {
             if (ModelState.IsValid)
             {
+                product.Favorite = true;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -84,7 +95,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -104,7 +115,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -141,7 +152,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -162,7 +173,7 @@ namespace Bakers.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, employee")]
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -187,5 +198,32 @@ namespace Bakers.Controllers
         {
           return _context.Product.Any(e => e.Id == id);
         }
+
+        [Authorize(Roles = "admin, user, employee")]
+        public async Task<IActionResult> AddToCart(string name = "")
+        {
+            Product product = await _context.Product.FirstOrDefaultAsync(p => p.Name.Equals(name));
+            string cartString = HttpContext.Session.GetString("Cart");
+           
+
+            if (cartString == null)
+            {
+                List<Product> items = new List<Product>();
+                items.Add(product);
+
+                Cart cart = new Cart();
+                cart.Items = items;
+
+                HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cart));
+            } else
+            {
+                Cart cart = JsonConvert.DeserializeObject<Cart>(cartString);
+                cart.Items.Add(product);
+
+                HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cart));
+            }
+            return RedirectToAction("Index", "Cart");
+        }
+
     }
 }

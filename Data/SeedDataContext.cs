@@ -43,7 +43,8 @@ namespace Bakers.Data
                     context.Roles.AddRange
                     (
                        new IdentityRole { Id = "admin", Name = "admin", NormalizedName = "ADMIN" },
-                       new IdentityRole { Id = "user", Name = "user", NormalizedName = "USER" }
+                       new IdentityRole { Id = "user", Name = "user", NormalizedName = "USER" },
+                       new IdentityRole { Id = "employee", Name = "employee", NormalizedName = "EMPLOYEE" }
                     );
                     context.SaveChanges();
 
@@ -51,7 +52,7 @@ namespace Bakers.Data
                         (
                             new IdentityUserRole<string> { RoleId = "user", UserId = administrator.Id },
                             new IdentityUserRole<string> { RoleId = "admin", UserId = administrator.Id },
-                            new IdentityUserRole<string> { RoleId = "user", UserId = dummy.Id }
+                            new IdentityUserRole<string> { RoleId = "employee", UserId = dummy.Id }
                         );
                     context.SaveChanges();
 
@@ -86,7 +87,7 @@ namespace Bakers.Data
                 {
                     context.Product.AddRange
                         (
-                            new Product { Name = "Chocolate Cake", Description = "Some Description", Price = 29.99, Image = "Image Test", Favorite = false, IsHidden = false, VarietyId = 1, OrderIds = orderIds}
+                            new Product { Name = "Chocolate Cake", Description = "Some Description", Price = 29.99, Image = "https://i.ytimg.com/vi/dsJtgmAhFF4/maxresdefault.jpg", Favorite = false, IsHidden = false, VarietyId = 1, OrderIds = orderIds}
                         );
                     context.SaveChanges();
                 }

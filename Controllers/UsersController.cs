@@ -122,5 +122,11 @@ namespace Bakers.Controllers
 
             return View(user);
         }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }

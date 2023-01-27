@@ -33,7 +33,19 @@ builder.Services.Configure<MailKitOptions>(options =>
     options.Security = false;  // true zet ssl or tls aan
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -59,6 +71,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {

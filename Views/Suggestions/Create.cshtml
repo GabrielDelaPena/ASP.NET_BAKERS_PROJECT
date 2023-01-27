@@ -1,13 +1,5 @@
 ﻿@model Bakers.Models.Product
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-@*<h1>Create</h1>
-
-<h4>Product</h4>
-<hr />*@
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-4">
         <form asp-action="Create" style="display: flex; flex-direction: column; gap: 8px;">
@@ -37,16 +29,10 @@
                     <input class="form-check-input" asp-for="Favorite" /> @Html.DisplayNameFor(model => model.Favorite)
                 </label>
             </div>*@
-            @*Varieties*@
             <div class="form-group">
                 <label asp-for="VarietyId" class="control-label"></label>
                 <select asp-for="VarietyId" class="form-control" asp-items="ViewBag.Variety"></select>
             </div>
-            @*Orders*@
-@*            <div class="form-group">
-                <label asp-for="OrderIds" class="control-label"></label>
-                <select asp-for="OrderIds" class="form-control" asp-items="ViewBag.Orders"></select>
-            </div>*@
             <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
             </div>
@@ -59,5 +45,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

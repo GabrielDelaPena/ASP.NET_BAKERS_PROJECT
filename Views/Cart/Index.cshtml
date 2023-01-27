@@ -1,0 +1,54 @@
+﻿@model Bakers.Models.Cart
+
+@{
+    string cartString = Context.Session.GetString("Cart");
+    double total = 0.0;
+
+    if (cartString != null) {
+        foreach (var item in Model.Items)
+        {
+            total = total + item.Price;
+        }
+    }   
+}
+
+<h1 style="margin-top: 120px;">CART ITEMS</h1>
+
+
+@if (cartString != null)
+{
+    <div style="margin-top: 50px; display: flex; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; gap: 35px;">
+            @foreach (var item in Model.Items)
+            {
+            <div style="display: flex; gap: 30px;">
+                <img src="@item.Image" style="height: 100px;">
+                <div style="display: flex; flex-direction: column;">
+                    <p style="font-size: 16px;">@item.Name</p>
+                    <p style="font-size: 16px;">1 x</p>
+                    <p style="font-size: 16px;">@item.Price</p>
+                </div>
+                <form>
+                        <button type="submit" asp-action="RemoveItem" asp-route-Id="@item.Id" style="height: 30px; width: 60px; border: none; border-radius: 4px; background-color: #DDB7B2; color: white;">❌</button>
+                </form>
+            </div>
+            }
+        </div>
+
+        <div style="display: flex; flex-direction: column; width: 20vw;">
+            <div style="display: flex; justify-content: space-between;">
+                <p>TOTAL:</p>
+                <p>@total</p>
+            </div>
+            <hr>
+            <form>
+                <button type="submit" asp-action="Payment" style="width: 100%; border: none; border-radius: 4px; background-color: #DDB7B2; color: black;">CHECK OUT NOW!</button>
+            </form>
+        </div>
+    </div>
+
+} else {
+    <h3 class="mt-5">Cart is empty.</h3>
+}
+
+

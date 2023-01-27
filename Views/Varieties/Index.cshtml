@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <div id="carouselImages" class="carousel slide" data-bs-ride="true">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -34,68 +33,36 @@
     <input type="submit" value="Filter" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
 </form>
 
-<table class="table">
-@*    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Products)
-            </th>
-            <th></th>
-        </tr>
-    </thead>*@
-    <tbody>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var item in Model) {
-            <div class="col">
-                <div class="card pie-card">
-                    <img src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="card-img-top">
-                    <div class="card-body pie-button">
-                        <div class="mt-2" style="display: flex; flex-direction: column;">
-                            <div class="d-flex justify-content-between">
-                                <h2 class="text-start">
-                                    <a class="pie-link" style="text-decoration: none; color: #000000; font-size: 20px;">@item.Name</a>
-                                </h2>
-                            </div>
-                            @if (User.IsInRole("admin"))
-                            {                               
-                                <a class="pie-link" style="text-decoration: none; color: #000000; cursor: pointer; font-size: 20px;" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    <div style="display: flex; justify-content: space-between; margin-top: 15px">
-                                <a asp-action="Edit" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">✏ Edit</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">❌ Delete</a>
-                                </div>
-                            }
-                        </div>
-                    </div>
+
+
+<div style="display: flex; flex-direction: column; gap: 25px;">
+@foreach (var item in Model) {
+    <div>     
+        <div>
+            <div style="display: flex; flex-direction: column;">
+                <div>
+                    <h2>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="pie-link" style="text-decoration: none; color: #000000; font-size: 20px;">@item.Name</a>
+                    </h2>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" style="text-decoration: none; color: black;">✏ Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none; color: black;">❌ Delete</a>
+                    }
                 </div>
             </div>
-@*        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @foreach (var product in item.Products)
-                {
-                    @Html.DisplayFor(modelItem => product.Name)
-                    <br /> 
-                }
-             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>*@
-}
         </div>
-    </tbody>
-</table>
+    </div>
+}
+</div>
+
+
 
 @if (User.IsInRole("admin"))
 {
-    <p>
+    <p style="margin-top: 25px;">
         Wanna add new variety?
         <a asp-action="Create" style="text-decoration: none; color: black; cursor: pointer;">Add New</a>
     </p>
