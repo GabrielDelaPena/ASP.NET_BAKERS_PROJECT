@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Bakers.Controllers
 {
-    [Authorize(Roles = "admin, user")]
+    [Authorize(Roles = "admin, user, employee")]
     public class PaymentController : Controller
     {
         private readonly BakersDbContext _context;
