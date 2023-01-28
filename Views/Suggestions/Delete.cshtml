@@ -6,11 +6,11 @@
 
 @*<h1>Delete</h1>*@
 
-<h3 style="margin-top: 120px;">Are you sure you want to delete @Html.DisplayFor(model => model.Name)?</h3>
+<h3 style="margin-top: 20px;">Are you sure you want to delete @Html.DisplayFor(model => model.Name)?</h3>
 <div>
     @*    <h4>Product</h4>*@
     <div class="row gx-5 mt-5">
-        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
+        <img alt="@Model.Name" src="@Model.Image" class="img-fluid col-5" />
         <div class="col-7">
             <h4>@Html.DisplayFor(model => model.Name)</h4>
             <p>@Html.DisplayFor(model => model.Description)</p>
