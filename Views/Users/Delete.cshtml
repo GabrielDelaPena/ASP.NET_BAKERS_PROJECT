@@ -6,6 +6,7 @@
 
 @*<h1>Details</h1>
 *@
+<h3 style="margin-top: 20px;">Are you sure you want to fire @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)?</h3>
 <div style="margin-top: 20px;">
     <dl class="row">
         <div style="display: flex; gap: 175px; margin-bottom: 0px;">
@@ -33,11 +34,14 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Orders)
         </dt>
-        @if (Model.Orders.Count == 0) {
+        @if (Model.Orders.Count == 0)
+        {
             <dd class="col-sm-10">
                 No orders yet.
             </dd>
-        } else {
+        }
+        else
+        {
             <dd class="col-sm-10">
                 @foreach (var order in Model.Orders)
                 {
@@ -48,7 +52,10 @@
         }
     </dl>
 </div>
+
 <div style="margin-top: 20px; display: flex; flex-direction: column; width: 150px;">
-    <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Edit" asp-route-userName="@Model?.UserName">✏ Edit</a>
-    <a style="text-decoration: none; color: black; cursor: pointer;" asp-action="Index">⬅ Back to List</a>
+    <form method="post" asp-action="ConfirmedDelete">
+        <input type="hidden" name="userName" value="@Model.UserName" />
+        <input type="submit" value="Fire" class="btn btn-danger" />
+    </form>       
 </div>

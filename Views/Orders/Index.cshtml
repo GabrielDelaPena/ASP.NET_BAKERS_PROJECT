@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-@*<h1>Index</h1>*@
 <table class="table" style="margin-top: 20px;">
     <thead>
         <tr>
@@ -46,6 +45,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.City)
             </td>
+            @if (item.Products.Count == 0) {
+            <td>
+                TBA
+            </td>
+            } else {
             <td>
                 @foreach (var product in item.Products)
                 {
@@ -53,9 +57,16 @@
                     <br />
                 }
             </td>
+            }
+            @if (item.User == null) {
+            <td>
+                TBA
+            </td>
+            } else {
             <td>
                 @Html.DisplayFor(modelItem => item.User.FirstName)
             </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Delivered)
             </td>
@@ -70,8 +81,8 @@
 </table>
 @if (User.IsInRole("admin"))
 {
-        <p>
-            Wanna add new order? 
-            <a asp-action="Create" style="text-decoration: none; color: black; cursor: pointer;">Place New</a>
-        </p>
+    <p style="margin-top: 25px;">
+        Wanna add new order for admin/users/employee? 
+        <a asp-action="Create" style="text-decoration: none; color: black; cursor: pointer;">Place New</a>
+    </p>
 }

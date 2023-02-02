@@ -10,6 +10,8 @@ using Bakers.Models;
 using Bakers.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Bakers.Models.ViewModels;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Bakers.Controllers
 {
@@ -32,6 +34,11 @@ namespace Bakers.Controllers
 
             if (!string.IsNullOrEmpty(searchField))
                 varieties = varieties.Where(v => v.Name.Contains(searchField) && !v.IsHidden).ToList();
+
+            if (!varieties.Any())
+            {
+                ViewData["NoProducts"] = "No products found.";
+            }
 
             ViewData["searchField"] = searchField;
             return View(varieties);
@@ -102,7 +109,9 @@ namespace Bakers.Controllers
                 return NotFound();
             }
 
-            ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
+            List<Product> products = _context.Product.Where(p => p.VarietyId == variety.Id).ToList();
+
+            ViewData["Products"] = new MultiSelectList(_context.Set<Product>(), "Id", "Name", products.Select(p => p.Id));
             return View(variety);
         }
 
@@ -147,7 +156,7 @@ namespace Bakers.Controllers
             }
             ViewData["Products"] = new SelectList(_context.Set<Product>(), "Id", "Name");
             return View(variety);
-        }
+        } 
 
         // GET: Varieties/Delete/5
         [Authorize(Roles = "admin")]

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Bakers.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace Bakers.Controllers
 {
@@ -15,10 +16,12 @@ namespace Bakers.Controllers
     public class UsersController : Controller
     {
         private readonly BakersDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(BakersDbContext context)
+        public UsersController(BakersDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -47,18 +50,6 @@ namespace Bakers.Controllers
 
         public IActionResult Edit(string userName)
         {
-            //if (id == null || _context.Users == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var users = await _context.Users.FindAsync(id);
-            //if (users == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(users);
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == userName);
             RoleViewModel rvm = new RoleViewModel()
             {
@@ -107,6 +98,16 @@ namespace Bakers.Controllers
 
         public async Task<IActionResult> Details(string? userName)
         {
+            ApplicationUser rvmuser = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            RoleViewModel rvm = new RoleViewModel()
+            {
+                UserName = rvmuser.UserName,
+                Roles = (from userRole in _context.UserRoles
+                         where userRole.UserId == rvmuser.Id
+                         orderby userRole.RoleId
+                         select userRole.RoleId).ToList()
+            };
+
             if (userName == null || _context.Users == null)
             {
                 return NotFound();
@@ -120,6 +121,9 @@ namespace Bakers.Controllers
                 return NotFound();
             }
 
+            string result = string.Join(", ", rvm.Roles);
+            ViewData["Roles"] = result;
+
             return View(user);
         }
 
@@ -127,6 +131,54 @@ namespace Bakers.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Delete(string? userName)
+        {
+            ApplicationUser rvmuser = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            RoleViewModel rvm = new RoleViewModel()
+            {
+                UserName = rvmuser.UserName,
+                Roles = (from userRole in _context.UserRoles
+                         where userRole.UserId == rvmuser.Id
+                         orderby userRole.RoleId
+                         select userRole.RoleId).ToList()
+            };
+
+            if (userName == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .Include(p => p.Orders)
+                .FirstOrDefaultAsync(u => u.UserName == userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            string result = string.Join(", ", rvm.Roles);
+            ViewData["Roles"] = result;
+
+            return View(user);
+        }
+
+        public async Task<IActionResult> ConfirmedDelete(string? userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return BadRequest();
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == userName);
+
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+
+            return RedirectToAction("Index", "Users");
         }
     }
 }

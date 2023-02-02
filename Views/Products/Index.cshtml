@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+
 <div id="carouselImages" class="carousel slide" data-bs-ride="true">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -22,13 +23,6 @@
     </div>
 </div>
 
-@*@if (User.IsInRole("admin"))
-{  
-    <p>
-    <a asp-action="Create">Create New</a>
-    </p>
-}*@
-
 <div>
     <h4 class="text-center mt-5">Pies of the week</h4>
     <h5 class="text-center">Enjoy a weekly selection of our favorites pies</h5>
@@ -40,118 +34,48 @@
     <input type="submit" value="Filter" style="border: none; border-radius: 4px; background-color: #DDB7B2; color: white; width: 100px" />
 </form>
 
-<table class="table">
-@*    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Favorite)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Variety)
-            </th>*@
-@*            <th>
-                @Html.DisplayNameFor(model => model.Orders)
-            </th>*@
-@*        </tr>
-    </thead>*@
-    <tbody>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach (var item in Model) {
-                <div class="col">
-                    <div class="card pie-card">
-                        <img src="@item.Image" class="card-img-top">
-                        <div class="card-body pie-button">
-                            @if (User.IsInRole("admin") || User.IsInRole("user") || User.IsInRole("employee"))
-                            {
-                                <h4 class="d-grid">
-                                    <a asp-action="AddToCart" asp-route-name="@item.Name" class="btn btn-secondary" style="background-color: #DDB7B2; border: none;">Add to cart</a>
-                                </h4>
-                            }
-                            <div class="mt-2" style="display: flex; flex-direction: column;">
-                                <div class="d-flex justify-content-between">
-                                <h2 class="text-start">
-                                    <a class="pie-link" style="text-decoration: none; color: #000000; cursor: pointer; font-size: 20px;" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                                </h2>
-                                <h5 class="text-end">
-                                    @item.Price €
-                                </h5>
-                                </div>
-                                <h6>@item.Variety.Name</h6>
-                                @if (User.IsInRole("admin") || User.IsInRole("employee"))
-                                {
-                                    <div style="display: flex; justify-content: space-between; margin-top: 15px">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">✏ Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">❌ Delete</a>
-                                    </div>
-                                }
-                            </div>
+<h2 style="text-align: center; margin-bottom: 30px;">@ViewData["NoProducts"]</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+@foreach (var item in Model) {
+        <div class="col">
+            <div class="card pie-card">
+                <img src="@item.Image" class="card-img-top">
+                <div class="card-body pie-button">
+                    @if (User.IsInRole("admin") || User.IsInRole("user") || User.IsInRole("employee"))
+                    {
+                        <h4 class="d-grid">
+                            <a asp-action="AddToCart" asp-route-name="@item.Name" class="btn btn-secondary" style="background-color: #DDB7B2; border: none;">Add to cart</a>
+                        </h4>
+                    }
+                    <div class="mt-2" style="display: flex; flex-direction: column;">
+                        <div class="d-flex justify-content-between">
+                        <h2 class="text-start">
+                            <a class="pie-link" style="text-decoration: none; color: #000000; cursor: pointer; font-size: 20px;" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                        </h2>
+                        <h5 class="text-end">
+                            @item.Price €
+                        </h5>
                         </div>
+                        <h6>@item.Variety.Name</h6>
+                        @if (User.IsInRole("admin") || User.IsInRole("employee"))
+                        {
+                            <div style="display: flex; justify-content: space-between; margin-top: 15px">
+                            <a asp-action="Edit" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">✏ Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none; color: black; width: 80px;">❌ Delete</a>
+                            </div>
+                        }
                     </div>
                 </div>
-@*        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Favorite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Variety.Name)
-            </td>*@
-@*            <td>
-                @foreach (var order in item.Orders)
-                {
-                    @Html.DisplayFor(modelItem => order.Id)<span>,</span>     
-                }
-            </td>*@
-@*            <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-            @if (User.IsInRole("admin"))
-            {
-            <span>|</span>
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            }
-            </td>
-        </tr>*@
-}
+            </div>
         </div>
-    </tbody>
-</table>
+    }
+</div>
 
 @if (User.IsInRole("admin") || User.IsInRole("employee"))
 {
-    <p>
+    <p style="margin-top: 25px;">
         Wanna add new cake? 
         <a asp-action="Create" style="text-decoration: none; color: black; cursor: pointer;">Create New</a>
     </p>
 }
-
-@*<script>
-    $(document).ready(function () {
-        $('.myButton').click(function () {
-            console.log("Hello, World!");
-        });
-    });
-</script>*@

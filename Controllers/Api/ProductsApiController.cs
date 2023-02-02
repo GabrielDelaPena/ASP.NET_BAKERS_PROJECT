@@ -12,6 +12,8 @@ using System.Data;
 
 namespace Bakers.Controllers.Api
 {
+    // [Authorize] staat op comment want als ik me inlog, gebeurt er niks.
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsApiController : ControllerBase

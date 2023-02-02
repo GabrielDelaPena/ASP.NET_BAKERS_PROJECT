@@ -34,13 +34,15 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <p style="color: orangered; margin-bottom: 0;">Please change/select the user.</p>
                 <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <p style="color: orangered; margin-bottom: 0;">Pleas select one or more products, else cart will be saved empty.</p>
                 <label asp-for="ProductIds" class="control-label"></label>
-                <select asp-for="ProductIds" class="form-control" asp-items="ViewBag.Products"></select>
+                <select multiple="multiple" asp-for="ProductIds" class="form-control" asp-items="ViewBag.Products"></select>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">

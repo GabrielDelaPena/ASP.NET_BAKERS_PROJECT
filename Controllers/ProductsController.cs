@@ -44,6 +44,11 @@ namespace Bakers.Controllers
             if (!string.IsNullOrEmpty(searchField))
                 products = products.Where(p => p.Name.Contains(searchField)).ToList();
 
+            if (!products.Any())
+            {
+                ViewData["NoProducts"] = "No products found.";
+            }
+
             ViewData["searchField"] = searchField;
             return View(products);
         }

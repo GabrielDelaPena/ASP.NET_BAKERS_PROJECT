@@ -1,4 +1,6 @@
 ﻿using Bakers.Areas.Identity.Data;
+using Bakers.Models;
+using Bakers.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ public class BakersDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Bakers.Models.Product> Product { get; set; }
     public DbSet<Bakers.Models.Variety> Variety { get; set; }
     public DbSet<Bakers.Models.Order> Order { get; set; }
+    public DbSet<Bakers.Models.Language> Language { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

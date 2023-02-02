@@ -4,42 +4,20 @@
     ViewData["Title"] = "Delete";
 }
 
-@*<h1>Delete</h1>*@
-
 <h3 style="margin-top: 20px;">Are you sure you want to delete @Html.DisplayFor(model => model.Name)?</h3>
 <div>
     <div class="row gx-5 mt-3">
-        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
-        <div class="col-7">
-            <h4>@Html.DisplayFor(model => model.Name)</h4>
+        <div class="col-7"style="display: flex; flex-direction: column; gap: 10px;">
+            <h5>Name : @Html.DisplayFor(model => model.Name)</h5>
             <h5>Products :</h5>
-            @foreach (var product in Model.Products)
-            {
-                @Html.DisplayFor(model => product.Name)
-                <br />
-            }
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                @foreach (var product in Model.Products)
+                {
+                    <img src="@product.Image" height="80px" />
+                }
+            </div>
         </div>
     </div>
-@*    <h4>Variety</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Products)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var product in Model.Products)
-            {
-                @Html.DisplayFor(model => product.Name)
-                <br />
-            }
-        </dd>
-    </dl>*@
     
     <form asp-action="Delete" class="d-flex flex-column mt-5" style="width: 115px; gap: 10px">
         <input type="hidden" asp-for="Id" />

@@ -10,29 +10,33 @@ using Bakers.Models;
 using Bakers.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Bakers.Models.ViewModels;
+using System.Security.Claims;
 
 namespace Bakers.Controllers
 {
-    [Authorize(Roles = "admin")]
     public class OrdersController : Controller
     {
         private readonly BakersDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OrdersController(BakersDbContext context)
+        public OrdersController(BakersDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchField = " ")
         {
-              return View(await _context.Order
+            return View(await _context.Order
                   .Where(o => !o.IsHidden)
                   .Include(o => o.Products)
                   .Include(o => o.User)
                   .ToListAsync());
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -53,6 +57,7 @@ namespace Bakers.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Orders/Create
         public IActionResult Create()
         {
@@ -61,6 +66,7 @@ namespace Bakers.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -68,6 +74,11 @@ namespace Bakers.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderDate,Street,Zip,City,ProductIds,UserId")] Order order)
         {
+            if (order.ProductIds == null)
+            {
+                order.ProductIds = new List<int>();
+            }
+
             if (ModelState.IsValid)
             {
                 order.Products = new List<Product>();
@@ -83,6 +94,7 @@ namespace Bakers.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -95,13 +107,14 @@ namespace Bakers.Controllers
             if (order == null)
             {
                 return NotFound();
-            }
+            }            
 
             ViewData["Products"] = new SelectList(_context.Set<Product>().Where(p => p.Favorite == true), "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -112,6 +125,11 @@ namespace Bakers.Controllers
             if (id != order.Id)
             {
                 return NotFound();
+            }
+
+            if (order.ProductIds == null)
+            {
+                order.ProductIds = new List<int>();
             }
 
             if (ModelState.IsValid)
@@ -153,6 +171,7 @@ namespace Bakers.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -173,6 +192,7 @@ namespace Bakers.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -196,6 +216,38 @@ namespace Bakers.Controllers
         private bool OrderExists(int id)
         {
           return _context.Order.Any(e => e.Id == id);
+        }
+
+        [Authorize(Roles = "admin, user, employee")]
+        public async Task<IActionResult> MyOrders()
+        {
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var userIdClaim = currentUser.FindFirst(ClaimTypes.NameIdentifier);
+            string userId = "";
+
+            if (userIdClaim != null)
+            {
+                userId = userIdClaim.Value;
+            }
+
+            var orders = await _context.Order
+                .Where(o => !o.IsHidden && o.UserId == userId)
+                .Include(o => o.Products)
+                .Include(o => o.User)
+                .ToListAsync();
+
+            if (orders.Count > 0)
+            {
+                return View(await _context.Order
+                    .Where(o => !o.IsHidden && o.UserId == userId)
+                    .Include(o => o.Products)
+                    .Include(o => o.User)
+                    .ToListAsync());
+            } else
+            {
+                ViewData["NoOrders"] = "Client has no orders.";
+                return View();
+            }
         }
     }
 }

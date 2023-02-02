@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <div class="text-center">
@@ -23,8 +27,25 @@
 </div>
 
 <div>
-    <h4 class="text-center mt-5">Welcome to Baker´s!</h4>
-    <h5 class="text-center">Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten.</h5>
+    <h4 class="text-center mt-5">@Localizer["Welcome to Baker´s!"]</h4>
+    <h5 class="text-center">
+        Welcome to the most delicious and scrumptious cake webshop on the internet! We are so glad that you have found us and we can't wait to share the joy of our cakes with you. 
+        Our webshop is the perfect place for cake lovers and sweet tooths alike. Our cakes are made with the finest ingredients, baked with love and care, 
+        and decorated with an extra sprinkle of magic to make every bite a memorable experience.
+    </h5>
+    <br />
+    <h5 class="text-center">
+        Whether you're celebrating a special occasion or just in need of a sweet treat, our webshop has something for everyone. 
+        Our menu is full of delicious options from classic cakes like chocolate, 
+        vanilla and red velvet to unique and creative cakes that you won't find anywhere else. 
+        Each of our cakes is made fresh to order and we guarantee that they will be the highlight of any event.
+    </h5>
+    <br />
+    <h5 class="text-center">
+        So, if you're looking for a cake that will leave a lasting impression on your taste buds, 
+        look no further. Our webshop is the perfect place to find the perfect cake for any occasion. 
+        Browse through our menu, customize your cake, and place your order today. We can't wait to share our love of cake with you!
+    </h5>
 </div>
 
 

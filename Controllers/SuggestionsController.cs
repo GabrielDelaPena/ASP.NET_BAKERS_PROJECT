@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Data;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 
 namespace Bakers.Controllers
@@ -15,10 +18,12 @@ namespace Bakers.Controllers
     {
         private readonly BakersDbContext _context;
         private readonly IHttpClientFactory _httpClientFactory;
+        List<Product> fetchedProducts = new List<Product>();
         public SuggestionsController(BakersDbContext context, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
+           
         }
 
         [Authorize(Roles = "admin, employee")]
@@ -27,9 +32,9 @@ namespace Bakers.Controllers
             var client = _httpClientFactory.CreateClient();
             var response = await client.GetAsync("https://localhost:7009/api/ProductsApi");
 
-            if (!response.IsSuccessStatusCode)
+            if (!response.RequestMessage.RequestUri.Equals("https://localhost:7009/api/ProductsApi"))
             {
-                return RedirectToAction("Index", "Products");
+                return Redirect(response.RequestMessage.RequestUri.ToString());
             }
 
             var jsonData = await response.Content.ReadAsStringAsync();

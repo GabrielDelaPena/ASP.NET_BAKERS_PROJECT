@@ -8,19 +8,19 @@
 <div style="margin-top: 20px;">
     <h4>Details for @Html.DisplayFor(model => model.Name)</h4>
     <div class="row gx-5 mt-3">
-        <img alt="@Model.Name" src="https://images-gmi-pmc.edge-generalmills.com/173da066-c6b4-45dd-9b28-0d459cf6f169.jpg" class="img-fluid col-5" />
-        <div class="col-7">
-            <h4>@Html.DisplayFor(model => model.Name)</h4>
+        <div class="col-7" style="display: flex; flex-direction: column; gap: 10px;">
+            <h5>Name : @Html.DisplayFor(model => model.Name)</h5>
             <h5>Products :</h5>
+            @if (Model.Products.Count == 0) {
+                <h5 style="color: orangered">No products available yet.</h5>
+            } else {
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                 @foreach (var product in Model.Products)
                 {
-                    @*@Html.DisplayFor(model => product.Name)
-                    <br />*@
                     <img src="@product.Image" height="80px"/>
                 }
             </div>
-
+            }
         </div>
     </div>
 </div>
